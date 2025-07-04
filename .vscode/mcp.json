@@ -1,0 +1,7 @@
+{
+  "servers": {
+    "sse": {
+      "url": "http://localhost:8080/sse"
+    }
+  }
+}
