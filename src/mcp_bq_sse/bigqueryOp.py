@@ -28,13 +28,7 @@ logger.info("Starting MCP BigQuery Server")
 
 
 class BigQueryDatabase:
-    def __init__(
-        self,
-        project: str,
-        location: str,
-        key_file: Optional[str],
-        datasets_filter: list[str],
-    ):
+    def __init__(self, project: str, location: str, key_file: Optional[str]):
         """Initialize a BigQuery database client"""
         logger.info(
             f"Initializing BigQuery client for project: {project}, location: {location}, key_file: {key_file}"
@@ -59,7 +53,6 @@ class BigQueryDatabase:
         self.client = bigquery.Client(
             credentials=credentials, project=project, location=location
         )
-        self.datasets_filter = datasets_filter
         self.last_query_results = None  # Store last query results for CSV conversion
 
     def execute_query(
@@ -87,15 +80,19 @@ class BigQueryDatabase:
             logger.error(f"Database error executing query: {e}")
             raise
 
-    def list_tables(self) -> list[str]:
+    def list_tables(self, datasets_filter) -> list[str]:
         """List all tables in the BigQuery database"""
-        logger.debug("Listing all tables")
-
-        if self.datasets_filter:
-            datasets = [
-                self.client.dataset(dataset) for dataset in self.datasets_filter
-            ]
+        if datasets_filter:
+            logger.debug("Listing {datasets_filter} tables")
+            dataset_ref = self.client.dataset(datasets_filter)
+            try:
+                dataset = self.client.get_dataset(dataset_ref)
+                datasets = [dataset]
+            except Exception as e:
+                logger.error(f"Dataset '{datasets_filter}' does not exist or cannot be accessed: {e}")
+                raise ValueError(f"Dataset '{datasets_filter}' does not exist or cannot be accessed")
         else:
+            logger.debug("Listing all datasets")
             datasets = list(self.client.list_datasets())
 
         logger.debug(f"Found {len(datasets)} datasets")
