@@ -201,8 +201,8 @@ results = mcp_sse_execute-query(
 ```python
 # Direct export with custom filename
 mcp_sse_save-csv-file(
-    query="SELECT * FROM campaign_data WHERE date >= '2024-01-01'",
-    file_path="/exports/campaign_data_2024.csv"
+    query="SELECT * FROM example_data WHERE date >= '2024-01-01'",
+    file_path="/exports/example_data_2024.csv"
 )
 
 # Auto-generated timestamped export
@@ -223,7 +223,7 @@ The server now supports filtering tables by dataset, which is particularly usefu
 analytics_tables = mcp_sse_list-tables(datasets_filter="analytics_data")
 
 # Examples of what you might get:
-# ['analytics_data.user_events', 
+# ['analytics_data.user_events',
 #  'analytics_data.page_views',
 #  'analytics_data.conversion_metrics', ...]
 
@@ -237,7 +237,6 @@ user_data = mcp_sse_execute-query(
     query="SELECT * FROM analytics_data.user_events LIMIT 10"
 )
 ```
-
 
 ## 🔧 Configuration
 
@@ -359,14 +358,14 @@ class BigQueryDatabase:
 
 ### MCP Tools
 
-| Tool | Description | Parameters |
-|------|-------------|------------|
-| `list-tables` | List all tables in BigQuery project | `datasets_filter` (optional): Filter by dataset name |
-| `describe-table` | Get table schema and DDL | `table_name` (required): Full table name (dataset.table) |
-| `execute-query` | Execute SELECT query | `query` (required): SQL query to execute |
-| `save-csv-file` | Execute query and save to CSV | `query` (required), `file_path` (required) |
-| `save-csv-auto` | Execute query and save to timestamped CSV | `query` (required), `directory` (optional), `base_name` (optional) |
-| `save-last-results-csv` | Save last query results to CSV | `file_path` (required) |
+| Tool                    | Description                               | Parameters                                                         |
+| ----------------------- | ----------------------------------------- | ------------------------------------------------------------------ |
+| `list-tables`           | List all tables in BigQuery project       | `datasets_filter` (optional): Filter by dataset name               |
+| `describe-table`        | Get table schema and DDL                  | `table_name` (required): Full table name (dataset.table)           |
+| `execute-query`         | Execute SELECT query                      | `query` (required): SQL query to execute                           |
+| `save-csv-file`         | Execute query and save to CSV             | `query` (required), `file_path` (required)                         |
+| `save-csv-auto`         | Execute query and save to timestamped CSV | `query` (required), `directory` (optional), `base_name` (optional) |
+| `save-last-results-csv` | Save last query results to CSV            | `file_path` (required)                                             |
 
 ## 🤝 Contributing
 
